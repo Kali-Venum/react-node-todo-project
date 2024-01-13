@@ -1,0 +1,13 @@
+{
+  "SUCCESS": "Success.",
+
+  "FAILED": "Failed",
+
+  "UNAUTHORIZED": "Unauthorized",
+
+  "USER": {
+    "USER_NOT_FOUND": "User not found.",
+    "USER_ALREADY_EXISTS": "User already exists.",
+    "INVALID_EMAIL_AND_PASSWORD_COMBINATION": "Email or Password is invalid."
+  }
+}
