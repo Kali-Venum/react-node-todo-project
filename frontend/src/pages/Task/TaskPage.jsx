@@ -63,6 +63,7 @@ const TaskPage = () => {
   };
   const modalCloser = () => {
     setTask({})
+    setUpdateTask("")
     setModal(false);
   };
 
@@ -176,7 +177,7 @@ const TaskPage = () => {
                   type="name"
                   name="name"
                   className="w-full outline-none rounded bg-gray-100 p-2 mt-2 mb-3"
-                  value={task?.name || values?.name}
+                  value={values?.name || task?.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -188,7 +189,7 @@ const TaskPage = () => {
                   type="description"
                   name="description"
                   className="w-full outline-none rounded bg-gray-100 p-2 mt-2 mb-3"
-                  value={task?.description || values?.description}
+                  value={values?.description || task?.description}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
