@@ -17,6 +17,14 @@ router.post(
   taskController.createATask
 );
 
+// Update a task route.
+router.patch(
+  "/update/:taskId",
+  auth(),
+  validate(taskValidation.updateATask),
+  taskController.updateATask
+);
+
 // Get all tasks of a user route.
 router.get(
   "/get",

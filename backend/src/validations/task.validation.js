@@ -10,6 +10,17 @@ const createATask = {
   }),
 };
 
+const updateATask = {
+  path: Joi.object().keys({
+    taskId: Joi.string().custom(objectId).required(),
+  }),
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createATask,
+  updateATask
 };
