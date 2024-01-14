@@ -20,7 +20,14 @@ const updateATask = {
   }),
 };
 
+const deleteATask = {
+  path: Joi.object().keys({
+    taskId: Joi.string().custom(objectId).required(),
+  }),
+};
+
 module.exports = {
   createATask,
-  updateATask
+  updateATask,
+  deleteATask
 };

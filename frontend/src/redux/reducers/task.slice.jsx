@@ -36,10 +36,33 @@ export const updateATask = createAsyncThunk(
     const tokens = localStorage.getItem("tokens");
     const accessToken = JSON.parse(tokens).access.token;
 
-    const {taskId, taskData} = data;
+    const { taskId, taskData } = data;
 
     try {
-      const response = await axios.patch(`${API_URL}/task/update/${taskId}`, taskData, {
+      const response = await axios.patch(
+        `${API_URL}/task/update/${taskId}`,
+        taskData,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteATask = createAsyncThunk(
+  "/api/task/delete",
+  async (data, { rejectWithValue }) => {
+    const tokens = localStorage.getItem("tokens");
+    const accessToken = JSON.parse(tokens).access.token;
+
+    const { taskId } = data;
+
+    try {
+      const response = await axios.delete(`${API_URL}/task/delete/${taskId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       return response.data;
@@ -77,7 +100,6 @@ const taskSlice = createSlice({
       })
       .addCase(createTask.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.user = payload.result.data;
         toast.success(payload.serverResponse.message);
       })
       .addCase(createTask.rejected, (state, { payload }) => {
@@ -89,10 +111,20 @@ const taskSlice = createSlice({
       })
       .addCase(updateATask.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.user = payload.result.data;
         toast.success(payload.serverResponse.message);
       })
       .addCase(updateATask.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.message);
+      })
+      .addCase(deleteATask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteATask.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success(payload.serverResponse.message);
+      })
+      .addCase(deleteATask.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload.message);
       })

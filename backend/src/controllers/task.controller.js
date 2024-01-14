@@ -38,6 +38,23 @@ const updateATask = catchAsync(async (req, res) => {
   }
 });
 
+const deleteATask = catchAsync(async (req, res) => {
+  const task = await taskService.deleteATask(req.user, req.params);
+
+  console.log(task, "task")
+
+  if (task) {
+    return res.status(200).send({
+      serverResponse: {
+        message: messages.SUCCESS,
+      },
+      result: {
+        data: task,
+      },
+    });
+  }
+});
+
 const getAllTasksOfAUser = catchAsync(async (req, res) => {
   const tasks = await taskService.getAllTasksOfAUser(req.user);
 
@@ -56,5 +73,6 @@ const getAllTasksOfAUser = catchAsync(async (req, res) => {
 module.exports = {
   createATask,
   updateATask,
+  deleteATask,
   getAllTasksOfAUser,
 };

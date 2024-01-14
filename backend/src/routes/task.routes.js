@@ -25,6 +25,14 @@ router.patch(
   taskController.updateATask
 );
 
+// Delete a task route.
+router.delete(
+  "/delete/:taskId",
+  auth(),
+  validate(taskValidation.deleteATask),
+  taskController.deleteATask
+);
+
 // Get all tasks of a user route.
 router.get(
   "/get",

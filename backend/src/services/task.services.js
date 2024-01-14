@@ -45,6 +45,22 @@ const updateATask = async (reqUser, reqBody, reqParams) => {
   }
 };
 
+const deleteATask = async (reqUser, reqParams) => {
+  if (reqUser.role === "user") {
+    const task = await TaskModel.findOne({
+      _id: new mongoose.Types.ObjectId(reqParams.taskId),
+      user: new mongoose.Types.ObjectId(reqUser._id),
+    });
+
+    if (task) {
+      const deletedTask = await TaskModel.findByIdAndDelete(reqParams.taskId);
+      return deletedTask;
+    }
+  } else {
+    httpStatus.BAD_REQUEST, messages.TASK.TASK_NOT_FOUND;
+  }
+};
+
 const getAllTasksOfAUser = async (reqUser) => {
   if (reqUser.role === "user") {
     const tasks = await TaskModel.find({
@@ -62,5 +78,6 @@ const getAllTasksOfAUser = async (reqUser) => {
 module.exports = {
   createATask,
   updateATask,
+  deleteATask,
   getAllTasksOfAUser,
 };

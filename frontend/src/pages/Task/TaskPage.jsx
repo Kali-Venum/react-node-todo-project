@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { createTaskSchema } from "../../schema/task.schema";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTasks, createTask, updateATask } from "../../redux/reducers/task.slice";
+import {
+  getAllTasks,
+  createTask,
+  updateATask,
+  deleteATask,
+} from "../../redux/reducers/task.slice";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -13,7 +18,7 @@ const TaskPage = () => {
   const [modal, setModal] = useState(false);
   const { tasksData } = useSelector((state) => state.taskReducer);
   const [task, setTask] = useState({});
-  const [updateTask, setUpdateTask] = useState("")
+  const [updateTask, setUpdateTask] = useState("");
 
   const initialValues = {
     name: task?.name ?? "",
@@ -27,7 +32,7 @@ const TaskPage = () => {
       validationSchema: createTaskSchema,
 
       onSubmit: async (values, action) => {
-        console.log(task, "task")
+        console.log(task, "task");
         if (updateTask) {
           const value = await dispatch(
             updateATask({ taskId: task._id, taskData: values })
@@ -58,12 +63,12 @@ const TaskPage = () => {
     });
 
   const modalOpener = () => {
-    setUpdateTask("")
+    setUpdateTask("");
     setModal(true);
   };
   const modalCloser = () => {
-    setTask({})
-    setUpdateTask("")
+    setTask({});
+    setUpdateTask("");
     setModal(false);
   };
 
@@ -80,9 +85,14 @@ const TaskPage = () => {
   const editModalHandler = (id) => {
     const singleTaskData = tasksData.find((item) => item._id === id);
 
-    setUpdateTask(singleTaskData._id)
+    setUpdateTask(singleTaskData._id);
     setTask(singleTaskData);
     setModal(true);
+  };
+
+  const deleteATaskHandler = async (id) => {
+    await dispatch(deleteATask({ taskId: id }));
+    dispatch(getAllTasks());
   };
 
   return (
@@ -144,7 +154,10 @@ const TaskPage = () => {
                               >
                                 <FiEdit />
                               </td>
-                              <td className="flex m-2 text-left">
+                              <td
+                                className="flex m-2 text-left"
+                                onClick={() => deleteATaskHandler(item._id)}
+                              >
                                 <MdDeleteOutline />
                               </td>
                             </div>
